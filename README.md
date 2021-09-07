@@ -23,3 +23,7 @@ To run fontend navigate inside client folder and run
 To run backend navigate to server folder and run
 
 ### npm run dev-server
+
+# Client UI
+
+![xyz](https://user-images.githubusercontent.com/58092199/132355769-2f6a7fd8-c631-49ff-bb94-4f190e86fe82.JPG)
