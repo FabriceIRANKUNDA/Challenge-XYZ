@@ -39,6 +39,7 @@ class TransferMoneyService {
 
   static performTransfer = async (req, res, next) => {
     const { amount, userId } = req.body;
+    console.log(req.body);
     try {
       const result = await this.performTransferHelper({ amount, userId }, next);
       return result;

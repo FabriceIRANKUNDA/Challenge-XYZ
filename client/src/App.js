@@ -13,6 +13,8 @@ import {
   Space,
   Select,
 } from "antd";
+import axios from "axios";
+import { stat } from "fs";
 
 const { Option } = Select;
 function App() {
@@ -24,7 +26,6 @@ function App() {
         <Col span={12} style={{ paddingRight: "5rem" }}>
           <SubmitForm />
         </Col>
-        <Col span={12}></Col>
       </Row>
     </Layout>
   );
@@ -34,10 +35,11 @@ export default App;
 
 const SubmitForm = () => {
   const [state, setState] = useState({
-    amount: "",
+    amount: 0,
     userId: "",
     ratedAmount: "",
     selectedCountry: "USD",
+    targetRecieveIn: "USD",
   });
   const countries = [
     {
@@ -58,22 +60,41 @@ const SubmitForm = () => {
     },
   ];
 
-  console.log(state);
-
   const onChangeCountry = (value) => {
     setState({
       ...state,
       selectedCountry: value,
     });
   };
+  const onChangeCountryTarget = (value) => {
+    setState({
+      ...state,
+      targetRecieveIn: value,
+    });
+  };
 
   const onchangeHandler = (event) => {
     const enteredAmount = event.target.value;
-    console.log(enteredAmount);
+    const curr = countries.filter((el) => el.name === state.selectedCountry);
+
+    const rated = +enteredAmount - +enteredAmount * curr[0].rate;
+    console.log(rated);
+    setState({
+      ...state,
+      amount: rated,
+    });
   };
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const onFinish = async () => {
+    const data = {
+      userId: Math.random().toString(),
+      amount: state.amount,
+    };
+    await axios({
+      method: "POST",
+      url: "http://localhost:5000/api/v1/users/transfer",
+      data,
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -98,7 +119,7 @@ const SubmitForm = () => {
             <Input
               size="large"
               style={{ width: "35rem" }}
-              value={state.amount}
+              // value={state.amount}
               onChange={onchangeHandler}
             />
             <Select
@@ -117,20 +138,18 @@ const SubmitForm = () => {
         </Form.Item>
 
         <label>Collect</label>
-        <Form.Item
-          name="collect"
-          rules={[{ required: true, message: "Please input an amount!" }]}
-        >
+        <Form.Item name="collect">
           <Space>
             <Input
               size="large"
               style={{ width: "35rem" }}
-              value={state.ratedAmount}
+              value={state.amount}
+              disabled={true}
             />
             <Select
               size="large"
-              onChange={onChangeCountry}
-              value={state.selectedCountry}
+              onChange={onChangeCountryTarget}
+              value={state.targetRecieveIn}
               style={{ width: "11rem" }}
             >
               {countries.map((el, index) => (
