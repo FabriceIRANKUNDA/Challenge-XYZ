@@ -14,7 +14,6 @@ import {
   Select,
 } from "antd";
 import axios from "axios";
-import { stat } from "fs";
 
 const { Option } = Select;
 function App() {
