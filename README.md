@@ -2,7 +2,7 @@
 Transfer money with MoMo API
 
 With this app you can transfer money using momo API
-# Stuck used:
+# Stack used:
 
 -> nodejs
 
